@@ -1,0 +1,49 @@
+#Style fuer clang-format.
+#siehe https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+
+#Verwendung in Qt
+# - llvm 7.0.1 installieren (\\lacos.intern\Entwicklung\Software\Windows\LLVM), z.B. nach D:\Programme\LLVM oder so
+# - in Qt Creator Tools -> Options -> Beautifier -> Clang-Format 
+#       den "Use Predefined Style" auf "File", dann nimmt als Stil-Konfiguration er die erste .clang-format die er von der cpp/Header-Datei
+#       aus im Verzeichnisbaum nach oben findet (i.d.R. aus dem NGQT Hauptverzeichnis)
+# - ich hab unter Beautifier -> General das "Enable auto format on file save" angehakt und als Tool den ClangFormat ausgewaehlt
+# - ansonsten kann man auch per Shortcut formatieren, aber einfacher ist immer on save
+
+#Qt Style der dazu passt:
+#  im NGQT Verzeichnis gibt es auch eine qt_creator_code_style.xml die so gut es geht diesen Enstellungen entspricht
+#  die kann im Qt Creator per Tools -> Options -> C++ -> Code Style -> Import importiert werden ("ngqt_style")
+
+
+#wir nehmen das was clang-format 7.0.0 als Stil "LLVM" als Default hat, mit den hier gelisteten Anpassungen
+BasedOnStyle: LLVM
+AccessModifierOffset: -4
+AlignTrailingComments: false
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortFunctionsOnASingleLine: Inline
+# eigentlich nur damit der Ist-Zustand == Soll-Zustand ist.
+# AlwaysBreakTemplateDeclarations==MultiLine ist der LLVM default,
+# funktioniert aber scheinbar nicht so wie beschrieben
+AlwaysBreakTemplateDeclarations: Yes
+#todo: mal drueber nachdenken
+#BinPackParameters: false
+#todo: mal drueber nachdenken
+#BreakBeforeBinaryOperators: All
+BreakBeforeBraces: Allman
+BreakConstructorInitializers: BeforeComma
+BreakInheritanceList: BeforeComma
+#ColumnLimit setzen wir absichtlich 0 weil sonst manuelle formatierung (newlines) kaputt gehen kann, leider
+ColumnLimit: 0
+#prevent space after comment //
+#see https://stackoverflow.com/questions/32970045/how-to-prevent-clang-format-to-add-space-after-comment-char
+CommentPragmas:  '^[^ ]'
+FixNamespaceComments: true
+IndentCaseLabels: false
+IndentWidth: 4
+NamespaceIndentation: None
+PointerAlignment: Left
+SortIncludes: false
+#mal ueberlegen. true == default ist das was der Kern braucht
+#SpaceAfterTemplateKeyword: false
+Standard: Cpp11
+UseTab: Never
+
