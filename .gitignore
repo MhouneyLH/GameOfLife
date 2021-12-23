@@ -4,6 +4,8 @@
 ### C++ ###
 # Prerequisites
 *.d
+*.ilk
+*.pdb
 
 # Compiled Object files
 *.slo
