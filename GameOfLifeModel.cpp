@@ -5,7 +5,9 @@
 #include <QSize>
 
 GameOfLifeModel::GameOfLifeModel(QObject* parent)
+    : QAbstractTableModel(parent)
 {
+    clear();
 }
 
 QHash<int, QByteArray> GameOfLifeModel::roleNames() const

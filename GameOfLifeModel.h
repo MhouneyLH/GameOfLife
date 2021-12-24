@@ -29,8 +29,8 @@ public:
     Q_INVOKABLE void clear();
 
 private:
-    static constexpr int width = 256U;
-    static constexpr int height = 256U;
+    static constexpr int width = 50;
+    static constexpr int height = 50;
     static constexpr int size = width * height;
 
     typedef std::array<bool, size> StateContainer;

@@ -1,35 +1,36 @@
 import QtQuick 2.15
 import QtQuick.Window 2.15
 import QtQuick.Controls 2.15
+import GameOfLifeModel 1.0
 
 Window {
     id: mainWindow
-    objectName: mainWindow
     visible: true
     width: 800
     height: 600
     minimumWidth: 800
     minimumHeight: 600
-    title: qsTr("Game Of Life")
+    title: qsTr("Conway’s Game Of Life")
 
     property int defaultMargin: 10
+    property int defaultHeaderSize: 14
+    property int defaultFontSize: 11
+    property int defaultHeight: 30
 
     GroupBox
     {
-        id: gameGroupBox
-        objectName: gameGroupBox
-        title: qsTr("The Game")
+        id: gameGroupBox      
+        title: qsTr("Simulation")
         width: parent.width / 1.5
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.margins: defaultMargin
-        padding: 0
+        font.pixelSize: defaultHeaderSize
 
         TableView
         {
-            id: gameTableView
-            objectName: gameTableView
+            id: gameTableView          
             anchors.fill: parent
             contentX: (contentWidth - width) / 2
             contentY: (contentHeight - height) / 2
@@ -37,14 +38,14 @@ Window {
             columnSpacing: 1
             ScrollBar.horizontal: ScrollBar {}
             ScrollBar.vertical: ScrollBar {}
+            clip: true
 
             delegate: Rectangle
             {
-                id: cell
-                objectName: cell
-                implicitWidth: 15
-                implicitHeight: 15
-                color: model.value ? "#f3f3f4" : "#b5b7bf"
+                id: cell                
+                implicitWidth: 7
+                implicitHeight: 7
+                color: model.value ? "#ff0026" : "#e1e1e6"
 
                 MouseArea
                 {
@@ -55,21 +56,124 @@ Window {
 
             model: GameOfLifeModel
             {
-                id: gameOfLifeModel
-                objectName: gameOfLifeModel
+                id: gameOfLifeModel         
             }
         }
     }
 
     GroupBox
     {
-        id: settingsGroupBox
-        objectName: settingsGroupBox
-        title: qsTr("Settings")
+        id: settingsGroupBox     
+        title: qsTr("Einstellungen")
         anchors.left: gameGroupBox.right
         anchors.top: parent.top
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.margins: defaultMargin
+        font.pixelSize: defaultHeaderSize
+
+        Column
+        {
+            id: patternColumn
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.right: parent.right
+            spacing: 2
+
+            Button
+            {
+                id: fillButton
+                text: qsTr("Zufällige Anordnung erstellen")
+                height: defaultHeight
+                anchors.left: parent.left
+                anchors.right: parent.right
+                font.pixelSize: defaultFontSize
+            }
+
+            Button
+            {
+                id: loadFileButton
+                text: qsTr("Anordnung laden")
+                height: defaultHeight
+                anchors.left: parent.left
+                anchors.right: parent.right
+                font.pixelSize: defaultFontSize
+            }
+
+            Button
+            {
+                id: saveFileButton
+                text: qsTr("Anordnung speichern")
+                height: defaultHeight
+                anchors.left: parent.left
+                anchors.right: parent.right
+                font.pixelSize: defaultFontSize
+            }
+
+            Button
+            {
+                id: startButton
+                text: qsTr("Starte die Simulation")
+                height: defaultHeight
+                anchors.left: parent.left
+                anchors.right: parent.right
+                font.pixelSize: defaultFontSize
+
+                onClicked: gameOfLifeModel.nextStep()
+            }
+        }
+
+        Column
+        {
+            id: loopColumn
+            anchors.left: parent.left
+            anchors.top: patternColumn.bottom
+            anchors.topMargin: defaultMargin
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+
+            Text
+            {
+                id: loopHeaderText
+                text: qsTr("Wiederholungen")
+                height: defaultHeight
+                font.pixelSize: defaultHeaderSize
+            }
+
+            Row
+            {
+                id: loopDetailsRow
+                anchors.left: parent.left
+                anchors.right: parent.right
+                spacing: 10
+
+                Text
+                {
+                    id: loopCountText
+                    text: qsTr("Anzahl:")
+                    height: defaultHeight
+                    verticalAlignment: Text.AlignVCenter
+                    font.pixelSize: defaultFontSize
+                }
+
+                Rectangle
+                {
+                    id: loopCountRect
+                    width: loopTextEdit.width + 8
+                    height: loopTextEdit.height + 5
+                    anchors.verticalCenter: loopCountText.verticalCenter
+                    border.color: "black"
+
+                    TextEdit
+                    {
+                        id: loopTextEdit
+                        text: qsTr("100")
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.pixelSize: defaultFontSize
+                    }
+                }
+            }
+        }
     }
 }
