@@ -1,7 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Window 2.15
 import QtQuick.Controls 2.15
-import GameOfLifeModel 1.0
 
 Window {
     id: mainWindow
@@ -19,7 +18,7 @@ Window {
 
     GroupBox
     {
-        id: gameGroupBox      
+        id: gameGroupBox
         title: qsTr("Simulation")
         width: parent.width / 1.5
         anchors.left: parent.left
@@ -39,6 +38,7 @@ Window {
             ScrollBar.horizontal: ScrollBar {}
             ScrollBar.vertical: ScrollBar {}
             clip: true
+            model: _qmlAdapter.gameOfLifeModel
 
             delegate: Rectangle
             {
@@ -52,11 +52,6 @@ Window {
                     anchors.fill: parent
                     onClicked: model.value = !model.value
                 }
-            }
-
-            model: GameOfLifeModel
-            {
-                id: gameOfLifeModel         
             }
         }
     }
@@ -119,7 +114,7 @@ Window {
                 anchors.right: parent.right
                 font.pixelSize: defaultFontSize
 
-                onClicked: gameOfLifeModel.nextStep()
+                onClicked: _qmlAdapter.gameOfLifeModel.nextStep()
             }
         }
 

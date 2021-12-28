@@ -12,8 +12,6 @@ int main(int argc, char* argv[])
     QmlAdapter adapter;
     engine.rootContext()->setContextProperty("_qmlAdapter", &adapter);
 
-    qmlRegisterType<GameOfLifeModel>("GameOfLifeModel", 1, 0, "GameOfLifeModel");
-
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;

@@ -82,6 +82,11 @@ void GameOfLifeModel::nextStep()
     Q_EMIT dataChanged(index(0, 0), index(height - 1, width - 1), {CellRole});
 }
 
+void GameOfLifeModel::nextLoop()
+{
+
+}
+
 bool GameOfLifeModel::loadFile(const QString& fileName)
 {
     QFile file(fileName);

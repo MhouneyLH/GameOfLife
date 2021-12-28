@@ -24,6 +24,7 @@ public:
     Qt::ItemFlags flags(const QModelIndex& index) const override;
 
     Q_INVOKABLE void nextStep();
+    Q_INVOKABLE void nextLoop();
     Q_INVOKABLE bool loadFile(const QString& fileName);
     Q_INVOKABLE void loadPattern(const QString& plainText);
     Q_INVOKABLE void clear();
