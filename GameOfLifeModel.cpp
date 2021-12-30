@@ -213,9 +213,12 @@ int GameOfLifeModel::getLivingCellsAtBeginningAsPercentage() const
 void GameOfLifeModel::setLivingCellsAtBeginningAsPercentage(int newLivingCellsAtBeginningAsPercentage)
 {
     if (m_livingCellsAtBeginningAsPercentage == newLivingCellsAtBeginningAsPercentage)
+    {
         return;
+    }
+
     m_livingCellsAtBeginningAsPercentage = newLivingCellsAtBeginningAsPercentage;
-    emit livingCellsAtBeginningAsPercentageChanged();
+    Q_EMIT livingCellsAtBeginningAsPercentageChanged();
 }
 
 void GameOfLifeModel::clearPattern()

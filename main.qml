@@ -82,9 +82,28 @@ Window {
                 height: defaultHeight
                 anchors.left: parent.left
                 anchors.right: parent.right
-                font.pixelSize: defaultFontSize
+                font.pixelSize: defaultFontSize;
 
                 onClicked: _qmlAdapter.gameOfLifeModel.generatePattern()
+            }
+
+            Text
+            {
+                id: livingCellsText
+                text: qsTr(_qmlAdapter.gameOfLifeModel.livingCellsAtBeginningAsPercentage.toString() + "%")
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+
+            Slider
+            {
+                id: livingCellsSlider
+                anchors.horizontalCenter: parent.horizontalCenter
+                value: 50
+                stepSize: 1
+                from: 1
+                to: 100
+
+                onValueChanged: _qmlAdapter.gameOfLifeModel.livingCellsAtBeginningAsPercentage = value
             }
 
             Button
