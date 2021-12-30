@@ -1,5 +1,5 @@
 #include "GameOfLifeModel.h"
-
+#include <QRandomGenerator>
 #include <QFile>
 #include <QRect>
 #include <QSize>
@@ -66,6 +66,23 @@ Qt::ItemFlags GameOfLifeModel::flags(const QModelIndex& index) const
     return Qt::ItemIsEditable;
 }
 
+void GameOfLifeModel::generatePattern()
+{
+    clearPattern();
+
+    for (std::size_t i = 0; i < size; i++)
+    {
+        const qint32 randomNumber = (QRandomGenerator::global()->generate() % 100) + 1;
+
+        if (randomNumber < m_livingCellsAtBeginningAsPercentage)
+        {
+            m_currentState[i] = true;
+        }
+    }
+
+    Q_EMIT dataChanged(index(0, 0), index(height - 1, width - 1), {CellRole});
+}
+
 void GameOfLifeModel::nextStep()
 {
     StateContainer newValues;
@@ -84,7 +101,6 @@ void GameOfLifeModel::nextStep()
 
 void GameOfLifeModel::nextLoop()
 {
-
 }
 
 bool GameOfLifeModel::loadFile(const QString& fileName)
@@ -187,4 +203,27 @@ QPoint GameOfLifeModel::cellCoordinatesFromIndex(int cellIndex)
 size_t GameOfLifeModel::cellIndex(const QPoint& cellCoordinates)
 {
     return std::size_t(cellCoordinates.y() * width + cellCoordinates.x());
+}
+
+int GameOfLifeModel::getLivingCellsAtBeginningAsPercentage() const
+{
+    return m_livingCellsAtBeginningAsPercentage;
+}
+
+void GameOfLifeModel::setLivingCellsAtBeginningAsPercentage(int newLivingCellsAtBeginningAsPercentage)
+{
+    if (m_livingCellsAtBeginningAsPercentage == newLivingCellsAtBeginningAsPercentage)
+        return;
+    m_livingCellsAtBeginningAsPercentage = newLivingCellsAtBeginningAsPercentage;
+    emit livingCellsAtBeginningAsPercentageChanged();
+}
+
+void GameOfLifeModel::clearPattern()
+{
+    for (std::size_t i = 0; i < size; i++)
+    {
+        m_currentState[i] = false;
+    }
+
+    Q_EMIT dataChanged(index(0, 0), index(height - 1, width - 1), {CellRole});
 }

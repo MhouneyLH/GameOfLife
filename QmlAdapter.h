@@ -11,7 +11,7 @@ class QmlAdapter : public QObject
     Q_PROPERTY(GameOfLifeModel* gameOfLifeModel READ getGameOfLifeModel WRITE setGameOfLifeModel NOTIFY gameOfLifeModelChanged)
 
 public:
-    QmlAdapter(QObject* parent = nullptr);
+    QmlAdapter();
     ~QmlAdapter();
 
 Q_SIGNALS:

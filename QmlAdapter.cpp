@@ -5,7 +5,7 @@ GameOfLifeModel* QmlAdapter::getGameOfLifeModel() const
     return m_gameOfLifeModel;
 }
 
-QmlAdapter::QmlAdapter(QObject* parent)
+QmlAdapter::QmlAdapter()
 {
     m_gameOfLifeModel = new GameOfLifeModel();
 }

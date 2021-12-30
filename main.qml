@@ -77,12 +77,14 @@ Window {
 
             Button
             {
-                id: fillButton
+                id: generatePatternButton
                 text: qsTr("Zufällige Anordnung erstellen")
                 height: defaultHeight
                 anchors.left: parent.left
                 anchors.right: parent.right
                 font.pixelSize: defaultFontSize
+
+                onClicked: _qmlAdapter.gameOfLifeModel.generatePattern()
             }
 
             Button
