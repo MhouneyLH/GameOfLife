@@ -3,6 +3,8 @@
 #include <QFile>
 #include <QRect>
 #include <QSize>
+#include <QThread>
+#include <QtTest/QtTest>
 
 GameOfLifeModel::GameOfLifeModel(QObject* parent)
     : QAbstractTableModel(parent)
@@ -72,7 +74,7 @@ void GameOfLifeModel::generatePattern()
 
     for (std::size_t i = 0; i < size; i++)
     {
-        const qint32 randomNumber = (QRandomGenerator::global()->generate() % 100) + 1;
+        const quint32 randomNumber = (QRandomGenerator::global()->generate() % 100) + 1;
 
         if (randomNumber < m_livingCellsAtBeginningAsPercentage)
         {
@@ -99,8 +101,13 @@ void GameOfLifeModel::nextStep()
     Q_EMIT dataChanged(index(0, 0), index(height - 1, width - 1), {CellRole});
 }
 
-void GameOfLifeModel::nextLoop()
+void GameOfLifeModel::startLoop()
 {
+    for (quint32 i = 0; i < m_loopCount; i++)
+    {
+        nextStep();
+        QTest::qWait(1);
+    }
 }
 
 bool GameOfLifeModel::loadFile(const QString& fileName)
@@ -229,4 +236,20 @@ void GameOfLifeModel::clearPattern()
     }
 
     Q_EMIT dataChanged(index(0, 0), index(height - 1, width - 1), {CellRole});
+}
+
+quint32 GameOfLifeModel::getLoopCount() const
+{
+    return m_loopCount;
+}
+
+void GameOfLifeModel::setLoopCount(quint32 newLoopCount)
+{
+    if (m_loopCount == newLoopCount)
+    {
+        return;
+    }
+
+    m_loopCount = newLoopCount;
+    Q_EMIT loopCountChanged();
 }

@@ -17,11 +17,9 @@ public:
 Q_SIGNALS:
     void gameOfLifeModelChanged();
 
-public Q_SLOTS:
-    void setGameOfLifeModel(GameOfLifeModel* newGameOfLifeModel);
-
 private:
     GameOfLifeModel* getGameOfLifeModel() const;
+    void setGameOfLifeModel(GameOfLifeModel* newGameOfLifeModel);
 
 private:
     GameOfLifeModel* m_gameOfLifeModel = nullptr;

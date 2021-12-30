@@ -92,6 +92,7 @@ Window {
                 id: livingCellsText
                 text: qsTr(_qmlAdapter.gameOfLifeModel.livingCellsAtBeginningAsPercentage.toString() + "%")
                 anchors.horizontalCenter: parent.horizontalCenter
+                font.pixelSize: defaultFontSize
             }
 
             Slider
@@ -124,18 +125,42 @@ Window {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 font.pixelSize: defaultFontSize
+            }            
+
+            Button
+            {
+                id: startLoopButton
+                text: qsTr("Starte die Wiederholungen")
+                height: defaultHeight
+                anchors.left: parent.left
+                anchors.right: parent.right
+                font.pixelSize: defaultFontSize
+
+                onClicked: _qmlAdapter.gameOfLifeModel.startLoop()
             }
 
             Button
             {
-                id: startButton
-                text: qsTr("Starte die Simulation")
+                id: nextStepButton
+                text: qsTr("Nächster Schritt")
                 height: defaultHeight
                 anchors.left: parent.left
                 anchors.right: parent.right
                 font.pixelSize: defaultFontSize
 
                 onClicked: _qmlAdapter.gameOfLifeModel.nextStep()
+            }
+
+            Button
+            {
+                id: clearPatternButton
+                text: qsTr("Anordnung löschen")
+                height: defaultHeight
+                anchors.left: parent.left
+                anchors.right: parent.right
+                font.pixelSize: defaultFontSize
+
+                onClicked: _qmlAdapter.gameOfLifeModel.clearPattern()
             }
         }
 
@@ -187,9 +212,11 @@ Window {
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.verticalCenter: parent.verticalCenter
                         font.pixelSize: defaultFontSize
+
+                        onTextChanged: _qmlAdapter.gameOfLifeModel.loopCount = parseInt(loopTextEdit.text)
                     }
                 }
-            }
+            }                       
         }
     }
 }
