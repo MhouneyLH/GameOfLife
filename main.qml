@@ -43,8 +43,8 @@ Window {
             delegate: Rectangle
             {
                 id: cell                
-                implicitWidth: 7
-                implicitHeight: 7
+                implicitWidth: 15
+                implicitHeight: 15
                 color: model.value ? "#ff0026" : "#e1e1e6"
 
                 MouseArea
@@ -126,6 +126,18 @@ Window {
                 anchors.right: parent.right
                 font.pixelSize: defaultFontSize
             }            
+
+            Button
+            {
+                id: infiniteLoopButton
+                text: qsTr("Starte unendliche Wiederholungen")
+                height: defaultHeight
+                anchors.left: parent.left
+                anchors.right: parent.right
+                font.pixelSize: defaultFontSize
+
+                onClicked: _qmlAdapter.gameOfLifeModel.startInfiniteLoop()
+            }
 
             Button
             {

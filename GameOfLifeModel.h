@@ -30,6 +30,7 @@ public:
 
     Q_INVOKABLE void generatePattern();
     Q_INVOKABLE void nextStep();
+    Q_INVOKABLE void startInfiniteLoop();
     Q_INVOKABLE void startLoop();
     Q_INVOKABLE bool loadFile(const QString& fileName);
     Q_INVOKABLE void loadPattern(const QString& plainText);
@@ -52,8 +53,8 @@ private:
     static std::size_t cellIndex(const QPoint& cellCoordinates);
 
 private:
-    static constexpr int width = 50;
-    static constexpr int height = 50;
+    static constexpr int width = 30;
+    static constexpr int height = 30;
     static constexpr int size = width * height;
     typedef std::array<bool, size> StateContainer;
 

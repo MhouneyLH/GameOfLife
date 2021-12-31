@@ -101,6 +101,15 @@ void GameOfLifeModel::nextStep()
     Q_EMIT dataChanged(index(0, 0), index(height - 1, width - 1), {CellRole});
 }
 
+void GameOfLifeModel::startInfiniteLoop()
+{
+    while (true)
+    {
+        nextStep();
+        QTest::qWait(0);
+    }
+}
+
 void GameOfLifeModel::startLoop()
 {
     for (quint32 i = 0; i < m_loopCount; i++)
