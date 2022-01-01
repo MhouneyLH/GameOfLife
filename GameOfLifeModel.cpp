@@ -9,7 +9,7 @@
 GameOfLifeModel::GameOfLifeModel(QObject* parent)
     : QAbstractTableModel(parent)
 {
-    clear();
+    clearPattern();
 }
 
 QHash<int, QByteArray> GameOfLifeModel::roleNames() const
@@ -70,6 +70,7 @@ Qt::ItemFlags GameOfLifeModel::flags(const QModelIndex& index) const
 
 void GameOfLifeModel::generatePattern()
 {
+    setStepCount(0U);
     clearPattern();
 
     for (std::size_t i = 0; i < size; i++)
@@ -82,6 +83,7 @@ void GameOfLifeModel::generatePattern()
         }
     }
 
+    m_loopIsStopping = false;
     Q_EMIT dataChanged(index(0, 0), index(height - 1, width - 1), {CellRole});
 }
 
@@ -98,21 +100,29 @@ void GameOfLifeModel::nextStep()
     }
 
     m_currentState = std::move(newValues);
+    setStepCount(m_stepCount + 1);
     Q_EMIT dataChanged(index(0, 0), index(height - 1, width - 1), {CellRole});
 }
 
+// @TODO: a conditon, when stopping, then another loop is possible
+
 void GameOfLifeModel::startInfiniteLoop()
 {
-    while (true)
+    if (m_stepCount)
+    {
+        return;
+    }
+
+    while (!m_loopIsStopping)
     {
         nextStep();
-        QTest::qWait(0);
+        QTest::qWait(1);
     }
 }
 
 void GameOfLifeModel::startLoop()
 {
-    for (quint32 i = 0; i < m_loopCount; i++)
+    for (quint32 i = 0; i < m_loopCount && !m_loopIsStopping; i++)
     {
         nextStep();
         QTest::qWait(1);
@@ -136,7 +146,7 @@ bool GameOfLifeModel::loadFile(const QString& fileName)
 
 void GameOfLifeModel::loadPattern(const QString& plainText)
 {
-    clear();
+    clearPattern();
 
     QStringList rows = plainText.split('\n');
     QSize patternSize(0, rows.count());
@@ -166,10 +176,15 @@ void GameOfLifeModel::loadPattern(const QString& plainText)
     Q_EMIT dataChanged(index(0, 0), index(height - 1, width - 1), {CellRole});
 }
 
-void GameOfLifeModel::clear()
+void GameOfLifeModel::clearPattern()
 {
     m_currentState.fill(false);
     Q_EMIT dataChanged(index(0, 0), index(height - 1, width - 1), {CellRole});
+}
+
+void GameOfLifeModel::stopLoop()
+{
+    m_loopIsStopping = true;
 }
 
 int GameOfLifeModel::cellNeighboursCount(const QPoint& cellCoordinates) const
@@ -237,16 +252,6 @@ void GameOfLifeModel::setLivingCellsAtBeginningAsPercentage(int newLivingCellsAt
     Q_EMIT livingCellsAtBeginningAsPercentageChanged();
 }
 
-void GameOfLifeModel::clearPattern()
-{
-    for (std::size_t i = 0; i < size; i++)
-    {
-        m_currentState[i] = false;
-    }
-
-    Q_EMIT dataChanged(index(0, 0), index(height - 1, width - 1), {CellRole});
-}
-
 quint32 GameOfLifeModel::getLoopCount() const
 {
     return m_loopCount;
@@ -261,4 +266,36 @@ void GameOfLifeModel::setLoopCount(quint32 newLoopCount)
 
     m_loopCount = newLoopCount;
     Q_EMIT loopCountChanged();
+}
+
+quint32 GameOfLifeModel::getStepCount() const
+{
+    return m_stepCount;
+}
+
+void GameOfLifeModel::setStepCount(quint32 newStepCount)
+{
+    if (m_stepCount == newStepCount)
+    {
+        return;
+    }
+
+    m_stepCount = newStepCount;
+    Q_EMIT stepCountChanged();
+}
+
+bool GameOfLifeModel::getLoopIsStopping() const
+{
+    return m_loopIsStopping;
+}
+
+void GameOfLifeModel::setLoopIsStopping(bool newLoopIsStopping)
+{
+    if (m_loopIsStopping == newLoopIsStopping)
+    {
+        return;
+    }
+
+    m_loopIsStopping = newLoopIsStopping;
+    Q_EMIT loopIsStoppingChanged();
 }

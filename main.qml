@@ -153,6 +153,18 @@ Window {
 
             Button
             {
+                id: stopLoopButton
+                text: qsTr("Loop stoppen")
+                height: defaultHeight
+                anchors.left: parent.left
+                anchors.right: parent.right
+                font.pixelSize: defaultFontSize
+
+                onClicked: _qmlAdapter.gameOfLifeModel.stopLoop()
+            }
+
+            Button
+            {
                 id: nextStepButton
                 text: qsTr("Nächster Schritt")
                 height: defaultHeight
@@ -228,7 +240,17 @@ Window {
                         onTextChanged: _qmlAdapter.gameOfLifeModel.loopCount = parseInt(loopTextEdit.text)
                     }
                 }
-            }                       
+            }
+
+            Text
+            {
+                id: stepCountText
+                text: qsTr("Schrittanzahl: " + _qmlAdapter.gameOfLifeModel.stepCount.toString())
+                height: defaultHeight
+                anchors.left: parent.left
+                anchors.right: parent.right
+                font.pixelSize: defaultFontSize
+            }
         }
     }
 }
