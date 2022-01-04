@@ -86,7 +86,7 @@ void GameOfLifeModel::generatePattern()
 
     clearPattern();
 
-    for (std::size_t i = 0; i < size; i++)
+    for (int i = 0; i < size; i++)
     {
         const quint32 randomNumber = QRandomGenerator::global()->generate() % 100;
 
@@ -251,9 +251,9 @@ QPoint GameOfLifeModel::cellCoordinatesFromIndex(int cellIndex)
     return {cellIndex % width, cellIndex / width};
 }
 
-size_t GameOfLifeModel::cellIndex(const QPoint& cellCoordinates)
+int GameOfLifeModel::cellIndex(const QPoint& cellCoordinates)
 {
-    return std::size_t(cellCoordinates.y() * width + cellCoordinates.x());
+    return cellCoordinates.y() * width + cellCoordinates.x();
 }
 
 int GameOfLifeModel::getLivingCellsAtBeginningAsPercentage() const
@@ -286,4 +286,9 @@ void GameOfLifeModel::setLoopCount(quint32 newLoopCount)
 quint32 GameOfLifeModel::getStepCount() const
 {
     return m_stepCount;
+}
+
+quint32 GameOfLifeModel::getLoopCount() const
+{
+    return m_loopCount;
 }

@@ -89,7 +89,7 @@ Window {
                 id: livingCellsSlider
                 anchors.left: parent.left
                 anchors.right: parent.right
-                value: 50
+                value: _qmlAdapter.gameOfLifeModel.livingCellsAtBeginningAsPercentage
                 stepSize: 1
                 from: 1
                 to: 100
@@ -170,7 +170,7 @@ Window {
                     TextEdit
                     {
                         id: loopTextEdit
-                        text: qsTr("20")
+                        text: qsTr(_qmlAdapter.gameOfLifeModel.loopCount.toString())
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.verticalCenter: parent.verticalCenter
                         font.pixelSize: defaultFontSize

@@ -10,7 +10,7 @@ class GameOfLifeModel : public QAbstractTableModel
     Q_OBJECT
     // @TODO: adding the funtions to just have to set the default values in the .cpp-file instead of setting them also in the .qml-file
     Q_PROPERTY(quint32 livingCellsAtBeginningAsPercentage READ getLivingCellsAtBeginningAsPercentage WRITE setLivingCellsAtBeginningAsPercentage NOTIFY livingCellsAtBeginningAsPercentageChanged)
-    Q_PROPERTY(quint32 loopCount WRITE setLoopCount NOTIFY loopCountChanged)
+    Q_PROPERTY(quint32 loopCount READ getLoopCount WRITE setLoopCount NOTIFY loopCountChanged)
     Q_PROPERTY(quint32 stepCount READ getStepCount NOTIFY stepCountChanged)
 
 public:
@@ -60,6 +60,7 @@ private:
     /////////////////////////////////////////////////////////
     int getLivingCellsAtBeginningAsPercentage() const;
     void setLivingCellsAtBeginningAsPercentage(int newLivingCellsAtBeginningAsPercentage);
+    quint32 getLoopCount() const;
     void setLoopCount(quint32 newLoopCount);
     quint32 getStepCount() const;
 
@@ -69,7 +70,7 @@ private:
     int cellNeighboursCount(const QPoint& cellCoordinates) const;
     static bool areCellCoordinatesValid(const QPoint& cellCoordinates);
     static QPoint cellCoordinatesFromIndex(int cellIndex);
-    static std::size_t cellIndex(const QPoint& cellCoordinates);
+    static int cellIndex(const QPoint& cellCoordinates);
 
 private:
     bool m_isEditable = true;
@@ -80,8 +81,8 @@ private:
     typedef QVector<int> StateContainer;
 
     StateContainer m_currentStateContainer;
-    quint32 m_livingCellsAtBeginningAsPercentage = 50U;
-    quint32 m_loopCount = 20U;
+    quint32 m_livingCellsAtBeginningAsPercentage = 70U;
+    quint32 m_loopCount = 50U;
     quint32 m_stepCount = 0U;
     bool m_loopIsStopping = false;
 };
