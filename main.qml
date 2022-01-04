@@ -37,7 +37,7 @@ Window {
             columnSpacing: 1
             ScrollBar.horizontal: ScrollBar {}
             ScrollBar.vertical: ScrollBar {}
-            clip: true
+            clip: true      
             model: _qmlAdapter.gameOfLifeModel
 
             delegate: Rectangle
@@ -45,11 +45,12 @@ Window {
                 id: cell                
                 implicitWidth: 15
                 implicitHeight: 15
-                color: model.value ? "#ff0026" : "#e1e1e6"
+                color: model.value ? "#098229" : "#e6f0e9"
 
                 MouseArea
                 {
                     anchors.fill: parent
+
                     onClicked: model.value = !model.value
                 }
             }
@@ -75,18 +76,6 @@ Window {
             anchors.right: parent.right
             spacing: 2
 
-            Button
-            {
-                id: generatePatternButton
-                text: qsTr("Zufällige Anordnung erstellen")
-                height: defaultHeight
-                anchors.left: parent.left
-                anchors.right: parent.right
-                font.pixelSize: defaultFontSize;
-
-                onClicked: _qmlAdapter.gameOfLifeModel.generatePattern()
-            }
-
             Text
             {
                 id: livingCellsText
@@ -98,7 +87,8 @@ Window {
             Slider
             {
                 id: livingCellsSlider
-                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.left: parent.left
+                anchors.right: parent.right
                 value: 50
                 stepSize: 1
                 from: 1
@@ -107,85 +97,33 @@ Window {
                 onValueChanged: _qmlAdapter.gameOfLifeModel.livingCellsAtBeginningAsPercentage = value
             }
 
-            Button
+            SettingsButton
             {
-                id: loadFileButton
-                text: qsTr("Anordnung laden")
-                height: defaultHeight
-                anchors.left: parent.left
-                anchors.right: parent.right
-                font.pixelSize: defaultFontSize
+                id: generatePatternButton
+                text: qsTr("Zufällige Anordnung erstellen")           
+
+                onClicked: _qmlAdapter.gameOfLifeModel.generatePattern()
             }
 
-            Button
-            {
-                id: saveFileButton
-                text: qsTr("Anordnung speichern")
-                height: defaultHeight
-                anchors.left: parent.left
-                anchors.right: parent.right
-                font.pixelSize: defaultFontSize
-            }            
-
-            Button
-            {
-                id: infiniteLoopButton
-                text: qsTr("Starte unendliche Wiederholungen")
-                height: defaultHeight
-                anchors.left: parent.left
-                anchors.right: parent.right
-                font.pixelSize: defaultFontSize
-
-                onClicked: _qmlAdapter.gameOfLifeModel.startInfiniteLoop()
-            }
-
-            Button
-            {
-                id: startLoopButton
-                text: qsTr("Starte die Wiederholungen")
-                height: defaultHeight
-                anchors.left: parent.left
-                anchors.right: parent.right
-                font.pixelSize: defaultFontSize
-
-                onClicked: _qmlAdapter.gameOfLifeModel.startLoop()
-            }
-
-            Button
-            {
-                id: stopLoopButton
-                text: qsTr("Loop stoppen")
-                height: defaultHeight
-                anchors.left: parent.left
-                anchors.right: parent.right
-                font.pixelSize: defaultFontSize
-
-                onClicked: _qmlAdapter.gameOfLifeModel.stopLoop()
-            }
-
-            Button
-            {
-                id: nextStepButton
-                text: qsTr("Nächster Schritt")
-                height: defaultHeight
-                anchors.left: parent.left
-                anchors.right: parent.right
-                font.pixelSize: defaultFontSize
-
-                onClicked: _qmlAdapter.gameOfLifeModel.nextStep()
-            }
-
-            Button
+            SettingsButton
             {
                 id: clearPatternButton
                 text: qsTr("Anordnung löschen")
-                height: defaultHeight
-                anchors.left: parent.left
-                anchors.right: parent.right
-                font.pixelSize: defaultFontSize
 
                 onClicked: _qmlAdapter.gameOfLifeModel.clearPattern()
             }
+
+            SettingsButton
+            {
+                id: loadFileButton
+                text: qsTr("Anordnung laden") 
+            }
+
+            SettingsButton
+            {
+                id: saveFileButton
+                text: qsTr("Anordnung speichern")
+            }            
         }
 
         Column
@@ -250,6 +188,38 @@ Window {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 font.pixelSize: defaultFontSize
+            }
+
+            SettingsButton
+            {
+                id: infiniteLoopButton
+                text: qsTr("Starte unendliche Wiederholungen")
+
+                onClicked: _qmlAdapter.gameOfLifeModel.startInfiniteLoop()
+            }
+
+            SettingsButton
+            {
+                id: startLoopButton
+                text: qsTr("Starte die Wiederholungen")
+
+                onClicked: _qmlAdapter.gameOfLifeModel.startLoop()
+            }
+
+            SettingsButton
+            {
+                id: nextStepButton
+                text: qsTr("Nächster Schritt")
+
+                onClicked: _qmlAdapter.gameOfLifeModel.nextStep()
+            }
+
+            SettingsButton
+            {
+                id: stopLoopButton
+                text: qsTr("Loop stoppen")
+
+                onClicked: _qmlAdapter.gameOfLifeModel.stopLoop()
             }
         }
     }
