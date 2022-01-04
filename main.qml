@@ -232,7 +232,7 @@ Window {
                     TextEdit
                     {
                         id: loopTextEdit
-                        text: qsTr("100")
+                        text: qsTr("20")
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.verticalCenter: parent.verticalCenter
                         font.pixelSize: defaultFontSize

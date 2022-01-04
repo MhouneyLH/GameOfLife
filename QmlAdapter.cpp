@@ -14,14 +14,3 @@ QmlAdapter::~QmlAdapter()
 {
     delete m_gameOfLifeModel;
 }
-
-void QmlAdapter::setGameOfLifeModel(GameOfLifeModel* newGameOfLifeModel)
-{
-    if (m_gameOfLifeModel == newGameOfLifeModel)
-    {
-        return;
-    }
-
-    m_gameOfLifeModel = newGameOfLifeModel;
-    Q_EMIT gameOfLifeModelChanged();
-}

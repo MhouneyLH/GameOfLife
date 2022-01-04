@@ -8,18 +8,14 @@
 class QmlAdapter : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(GameOfLifeModel* gameOfLifeModel READ getGameOfLifeModel WRITE setGameOfLifeModel NOTIFY gameOfLifeModelChanged)
+    Q_PROPERTY(GameOfLifeModel* gameOfLifeModel READ getGameOfLifeModel CONSTANT)
 
 public:
     QmlAdapter();
     ~QmlAdapter();
 
-Q_SIGNALS:
-    void gameOfLifeModelChanged();
-
 private:
     GameOfLifeModel* getGameOfLifeModel() const;
-    void setGameOfLifeModel(GameOfLifeModel* newGameOfLifeModel);
 
 private:
     GameOfLifeModel* m_gameOfLifeModel = nullptr;

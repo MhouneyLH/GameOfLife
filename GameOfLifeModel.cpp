@@ -6,10 +6,16 @@
 #include <QThread>
 #include <QtTest/QtTest>
 
-GameOfLifeModel::GameOfLifeModel(QObject* parent)
+GameOfLifeModel::GameOfLifeModel(bool editable, QObject* parent)
     : QAbstractTableModel(parent)
+    , m_isEditable(editable)
 {
-    clearPattern();
+    m_currentState.fill(false);
+}
+
+bool GameOfLifeModel::isEditable() const
+{
+    return m_isEditable;
 }
 
 QHash<int, QByteArray> GameOfLifeModel::roleNames() const
@@ -61,16 +67,23 @@ bool GameOfLifeModel::setData(const QModelIndex& index, const QVariant& value, i
 
 Qt::ItemFlags GameOfLifeModel::flags(const QModelIndex& index) const
 {
-    if (!index.isValid())
+    Q_UNUSED(index)
+
+    Qt::ItemFlags flag;
+
+    if (m_isEditable)
     {
-        return Qt::NoItemFlags;
+        flag = Qt::ItemIsEditable;
     }
-    return Qt::ItemIsEditable;
+
+    return flag;
 }
 
 void GameOfLifeModel::generatePattern()
 {
-    setStepCount(0U);
+    m_stepCount = 0U;
+    Q_EMIT stepCountChanged();
+
     clearPattern();
 
     for (std::size_t i = 0; i < size; i++)
@@ -100,8 +113,10 @@ void GameOfLifeModel::nextStep()
     }
 
     m_currentState = std::move(newValues);
-    setStepCount(m_stepCount + 1);
     Q_EMIT dataChanged(index(0, 0), index(height - 1, width - 1), {CellRole});
+
+    m_stepCount++;
+    Q_EMIT stepCountChanged();
 }
 
 // @TODO: a conditon, when stopping, then another loop is possible
@@ -175,9 +190,10 @@ void GameOfLifeModel::loadPattern(const QString& plainText)
 
 void GameOfLifeModel::clearPattern()
 {
-    m_currentState.fill(false);
-    setStepCount(0U);
+    m_stepCount = 0U;
+    Q_EMIT stepCountChanged();
 
+    m_currentState.fill(false);
     Q_EMIT dataChanged(index(0, 0), index(height - 1, width - 1), {CellRole});
 }
 
@@ -251,11 +267,6 @@ void GameOfLifeModel::setLivingCellsAtBeginningAsPercentage(int newLivingCellsAt
     Q_EMIT livingCellsAtBeginningAsPercentageChanged();
 }
 
-quint32 GameOfLifeModel::getLoopCount() const
-{
-    return m_loopCount;
-}
-
 void GameOfLifeModel::setLoopCount(quint32 newLoopCount)
 {
     if (m_loopCount == newLoopCount)
@@ -270,31 +281,4 @@ void GameOfLifeModel::setLoopCount(quint32 newLoopCount)
 quint32 GameOfLifeModel::getStepCount() const
 {
     return m_stepCount;
-}
-
-void GameOfLifeModel::setStepCount(quint32 newStepCount)
-{
-    if (m_stepCount == newStepCount)
-    {
-        return;
-    }
-
-    m_stepCount = newStepCount;
-    Q_EMIT stepCountChanged();
-}
-
-bool GameOfLifeModel::getLoopIsStopping() const
-{
-    return m_loopIsStopping;
-}
-
-void GameOfLifeModel::setLoopIsStopping(bool newLoopIsStopping)
-{
-    if (m_loopIsStopping == newLoopIsStopping)
-    {
-        return;
-    }
-
-    m_loopIsStopping = newLoopIsStopping;
-    Q_EMIT loopIsStoppingChanged();
 }
