@@ -88,7 +88,7 @@ void GameOfLifeModel::generatePattern()
 
     for (std::size_t i = 0; i < size; i++)
     {
-        const quint32 randomNumber = (QRandomGenerator::global()->generate() % 100) + 1;
+        const quint32 randomNumber = QRandomGenerator::global()->generate() % 100;
 
         if (randomNumber < m_livingCellsAtBeginningAsPercentage)
         {
