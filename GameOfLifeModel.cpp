@@ -137,7 +137,7 @@ void GameOfLifeModel::startInfiniteLoop()
     while (!m_loopIsStopping)
     {
         nextStep();
-        QTest::qWait(0);
+        QTest::qWait(m_delay);
     }
 }
 
@@ -147,7 +147,7 @@ void GameOfLifeModel::startLoop()
     for (quint32 i = 0; i < m_loopCount && !m_loopIsStopping; i++)
     {
         nextStep();
-        QTest::qWait(0);
+        QTest::qWait(m_delay);
     }
 }
 
@@ -296,4 +296,20 @@ quint32 GameOfLifeModel::getStepCount() const
 quint32 GameOfLifeModel::getLoopCount() const
 {
     return m_loopCount;
+}
+
+quint32 GameOfLifeModel::getDelay() const
+{
+    return m_delay;
+}
+
+void GameOfLifeModel::setDelay(quint32 newDelay)
+{
+    if (m_delay == newDelay)
+    {
+        return;
+    }
+
+    m_delay = newDelay;
+    Q_EMIT delayChanged();
 }

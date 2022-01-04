@@ -9,6 +9,8 @@ Window {
     height: 600
     minimumWidth: 800
     minimumHeight: 600
+    maximumWidth: 1280
+    maximumHeight: 1024
     title: qsTr("Conway’s Game Of Life")
 
     property int defaultMargin: 10
@@ -154,6 +156,7 @@ Window {
                 {
                     id: loopCountText
                     text: qsTr("Anzahl:")
+                    width: parent.width / 5
                     height: defaultHeight
                     verticalAlignment: Text.AlignVCenter
                     font.pixelSize: defaultFontSize
@@ -162,7 +165,7 @@ Window {
                 Rectangle
                 {
                     id: loopCountRect
-                    width: loopTextEdit.width + 8
+                    width: parent.width / 5
                     height: loopTextEdit.height + 5
                     anchors.verticalCenter: loopCountText.verticalCenter
                     border.color: "black"
@@ -177,6 +180,44 @@ Window {
 
                         onTextChanged: _qmlAdapter.gameOfLifeModel.loopCount = parseInt(loopTextEdit.text)
                     }
+                }
+            }
+
+            Row
+            {
+                id: delayRow
+                anchors.left: parent.left
+                anchors.right: parent.right
+                spacing: 10
+
+                Text
+                {
+                    id: delayText
+                    text: qsTr("Delay:")
+                    width: parent.width / 5
+                    height: defaultHeight
+                    font.pixelSize: defaultFontSize
+                }
+
+                Text
+                {
+                    id: delayTextBesideSlider
+                    text: qsTr(_qmlAdapter.gameOfLifeModel.delay.toString() + "ms")
+                    width: parent.width / 5
+                    height: defaultHeight
+                    font.pixelSize: defaultFontSize
+                }
+
+                Slider
+                {
+                    id: delaySlider
+                    width: parent.width / 2
+                    value: _qmlAdapter.gameOfLifeModel.delay
+                    stepSize: 1
+                    from: 0
+                    to: 1000
+
+                    onValueChanged: _qmlAdapter.gameOfLifeModel.delay = value
                 }
             }
 
