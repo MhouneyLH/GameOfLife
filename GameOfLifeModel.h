@@ -79,8 +79,8 @@ private:
 private:
     bool m_isEditable = true;
 
-    static constexpr int width = 50;
-    static constexpr int height = 50;
+    static constexpr int width = 5;
+    static constexpr int height = 5;
     static constexpr int size = width * height;
     typedef QVector<int> StateContainer;
 
@@ -90,6 +90,7 @@ private:
     quint32 m_stepCount = 0U;
     bool m_loopIsStopping = false;
     quint32 m_delay = 0U;
+    bool m_isGameStable = false;
 };
 
 #endif // GAMEOFLIFEMODEL_H1B7AD7A5506F4C6995FCE4824C51B436
