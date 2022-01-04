@@ -75,14 +75,14 @@ private:
 private:
     bool m_isEditable = true;
 
-    static constexpr int width = 15;
-    static constexpr int height = 15;
+    static constexpr int width = 50;
+    static constexpr int height = 50;
     static constexpr int size = width * height;
     typedef QVector<int> StateContainer;
 
     StateContainer m_currentStateContainer;
-    quint32 m_livingCellsAtBeginningAsPercentage = 70U;
-    quint32 m_loopCount = 50U;
+    quint32 m_livingCellsAtBeginningAsPercentage = 50U;
+    quint32 m_loopCount = 100U;
     quint32 m_stepCount = 0U;
     bool m_loopIsStopping = false;
 };

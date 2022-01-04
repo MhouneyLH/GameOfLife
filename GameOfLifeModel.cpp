@@ -5,6 +5,8 @@
 #include <QSize>
 #include <QThread>
 #include <QtTest/QtTest>
+#include <QDateTime>
+#include <QDebug>
 
 GameOfLifeModel::GameOfLifeModel(bool editable, QObject* parent)
     : QAbstractTableModel(parent)
@@ -102,6 +104,7 @@ void GameOfLifeModel::generatePattern()
 
 void GameOfLifeModel::nextStep()
 {
+    qint64 startTime = QDateTime::currentMSecsSinceEpoch();
     StateContainer newStateContainer(size);
 
     for (int i = 0; i < size; i++)
@@ -124,6 +127,8 @@ void GameOfLifeModel::nextStep()
 
     m_stepCount++;
     Q_EMIT stepCountChanged();
+
+    qDebug() << QDateTime::currentMSecsSinceEpoch() - startTime << "ms";
 }
 
 void GameOfLifeModel::startInfiniteLoop()
@@ -132,7 +137,7 @@ void GameOfLifeModel::startInfiniteLoop()
     while (!m_loopIsStopping)
     {
         nextStep();
-        QTest::qWait(1);
+        QTest::qWait(0);
     }
 }
 
@@ -142,7 +147,7 @@ void GameOfLifeModel::startLoop()
     for (quint32 i = 0; i < m_loopCount && !m_loopIsStopping; i++)
     {
         nextStep();
-        QTest::qWait(1);
+        QTest::qWait(0);
     }
 }
 
