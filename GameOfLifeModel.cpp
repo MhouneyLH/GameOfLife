@@ -108,11 +108,7 @@ void GameOfLifeModel::nextStep()
 
 void GameOfLifeModel::startInfiniteLoop()
 {
-    if (m_stepCount)
-    {
-        return;
-    }
-
+    m_loopIsStopping = false;
     while (!m_loopIsStopping)
     {
         nextStep();
@@ -122,6 +118,7 @@ void GameOfLifeModel::startInfiniteLoop()
 
 void GameOfLifeModel::startLoop()
 {
+    m_loopIsStopping = false;
     for (quint32 i = 0; i < m_loopCount && !m_loopIsStopping; i++)
     {
         nextStep();
@@ -179,6 +176,8 @@ void GameOfLifeModel::loadPattern(const QString& plainText)
 void GameOfLifeModel::clearPattern()
 {
     m_currentState.fill(false);
+    setStepCount(0U);
+
     Q_EMIT dataChanged(index(0, 0), index(height - 1, width - 1), {CellRole});
 }
 
