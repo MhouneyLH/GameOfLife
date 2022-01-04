@@ -3,6 +3,7 @@
 
 #include <QAbstractTableModel>
 #include <QPoint>
+#include <QVector>
 
 class GameOfLifeModel : public QAbstractTableModel
 {
@@ -73,12 +74,12 @@ private:
 private:
     bool m_isEditable = true;
 
-    static constexpr int width = 30;
-    static constexpr int height = 30;
+    static constexpr int width = 15;
+    static constexpr int height = 15;
     static constexpr int size = width * height;
-    typedef std::array<bool, size> StateContainer;
+    typedef QVector<int> StateContainer;
 
-    StateContainer m_currentState;
+    StateContainer m_currentStateContainer;
     quint32 m_livingCellsAtBeginningAsPercentage = 50U;
     quint32 m_loopCount = 20U;
     quint32 m_stepCount = 0U;

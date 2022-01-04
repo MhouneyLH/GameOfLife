@@ -43,8 +43,8 @@ Window {
             delegate: Rectangle
             {
                 id: cell                
-                implicitWidth: 15
-                implicitHeight: 15
+                implicitWidth: 30
+                implicitHeight: 30
                 color: model.value ? "#098229" : "#e6f0e9"
 
                 MouseArea

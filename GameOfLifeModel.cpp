@@ -10,7 +10,7 @@ GameOfLifeModel::GameOfLifeModel(bool editable, QObject* parent)
     : QAbstractTableModel(parent)
     , m_isEditable(editable)
 {
-    m_currentState.fill(false);
+    m_currentStateContainer.resize(size, false);
 }
 
 bool GameOfLifeModel::isEditable() const
@@ -48,8 +48,8 @@ QVariant GameOfLifeModel::data(const QModelIndex& index, int role) const
     {
         return QVariant();
     }
-    return QVariant(m_currentState[cellIndex({index.column(),
-                                              index.row()})]);
+    return QVariant(m_currentStateContainer[cellIndex({index.column(),
+                                                       index.row()})]);
 }
 
 bool GameOfLifeModel::setData(const QModelIndex& index, const QVariant& value, int role)
@@ -59,7 +59,7 @@ bool GameOfLifeModel::setData(const QModelIndex& index, const QVariant& value, i
         return false;
     }
 
-    m_currentState[cellIndex({index.column(), index.row()})] = value.toBool();
+    m_currentStateContainer[cellIndex({index.column(), index.row()})] = value.toBool();
     Q_EMIT dataChanged(index, index, {role});
 
     return true;
@@ -92,7 +92,7 @@ void GameOfLifeModel::generatePattern()
 
         if (randomNumber < m_livingCellsAtBeginningAsPercentage)
         {
-            m_currentState[i] = true;
+            m_currentStateContainer[i] = true;
         }
     }
 
@@ -102,24 +102,29 @@ void GameOfLifeModel::generatePattern()
 
 void GameOfLifeModel::nextStep()
 {
-    StateContainer newValues;
+    StateContainer newStateContainer(size);
 
-    for (std::size_t i = 0; i < size; i++)
+    for (int i = 0; i < size; i++)
     {
-        bool currentState = m_currentState[i];
-        int cellNeighboursCount = this->cellNeighboursCount(cellCoordinatesFromIndex(static_cast<int>(i)));
+        bool currentState = m_currentStateContainer[i];
+        int cellNeighboursCount = this->cellNeighboursCount(cellCoordinatesFromIndex(i));
 
-        newValues[i] = currentState == true ? cellNeighboursCount == 2 || cellNeighboursCount == 3 : cellNeighboursCount == 3;
+        if (currentState)
+        {
+            newStateContainer[i] = cellNeighboursCount == 2 || cellNeighboursCount == 3; // 2 or 3, so the cell lives
+        }
+        else
+        {
+            newStateContainer[i] = cellNeighboursCount == 3; // 3 so the cell gets alive
+        }
     }
 
-    m_currentState = std::move(newValues);
+    m_currentStateContainer = std::move(newStateContainer);
     Q_EMIT dataChanged(index(0, 0), index(height - 1, width - 1), {CellRole});
 
     m_stepCount++;
     Q_EMIT stepCountChanged();
 }
-
-// @TODO: a conditon, when stopping, then another loop is possible
 
 void GameOfLifeModel::startInfiniteLoop()
 {
@@ -181,7 +186,7 @@ void GameOfLifeModel::loadPattern(const QString& plainText)
         for (int x = 0; x < line.length(); x++)
         {
             QPoint cellPosition(x + patternLocation.x(), y + patternLocation.y());
-            m_currentState[cellIndex(cellPosition)] = line[x] == 'O';
+            m_currentStateContainer[cellIndex(cellPosition)] = line[x] == 'O';
         }
     }
 
@@ -193,7 +198,7 @@ void GameOfLifeModel::clearPattern()
     m_stepCount = 0U;
     Q_EMIT stepCountChanged();
 
-    m_currentState.fill(false);
+    m_currentStateContainer.fill(false);
     Q_EMIT dataChanged(index(0, 0), index(height - 1, width - 1), {CellRole});
 }
 
@@ -221,7 +226,7 @@ int GameOfLifeModel::cellNeighboursCount(const QPoint& cellCoordinates) const
                 continue;
             }
 
-            if (m_currentState[cellIndex(neighbourPosition)])
+            if (m_currentStateContainer[cellIndex(neighbourPosition)])
             {
                 count++;
             }
