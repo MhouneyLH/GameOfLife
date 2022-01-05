@@ -103,33 +103,23 @@ void GameOfLifeModel::nextStep()
 {
     qint64 startTime = QDateTime::currentMSecsSinceEpoch();
 
-    quint32 equivalentCellsCount = 0U;
     StateContainer newStateContainer(size);
 
     for (int i = 0; i < size; i++)
     {
+        const quint32 randomNumber = QRandomGenerator::global()->generate() % m_mutationConstant;
+
         bool currentState = m_currentStateContainer[i];
         int cellNeighboursCount = this->cellNeighboursCount(cellCoordinatesFromIndex(i));
 
         if (currentState)
         {
-            newStateContainer[i] = cellNeighboursCount == 2 || cellNeighboursCount == 3; // 2 or 3, so the cell lives
+            newStateContainer[i] = cellNeighboursCount == TwoNeighbours || cellNeighboursCount == ThreeNeighbours; // 2 or 3, so the cell lives
         }
         else
         {
-            newStateContainer[i] = cellNeighboursCount == 3; // 3 so the cell gets alive
+            newStateContainer[i] = cellNeighboursCount == ThreeNeighbours || randomNumber == 0U; // 3 so the cell gets alive or because of the mutationConstant
         }
-
-        if (currentState != static_cast<bool>(newStateContainer[i]))
-        {
-            equivalentCellsCount++;
-        }
-    }
-
-    if (equivalentCellsCount == size || equivalentCellsCount == 0U)
-    {
-        m_isGameStable = true;
-        return;
     }
 
     m_currentStateContainer = std::move(newStateContainer);
@@ -144,7 +134,7 @@ void GameOfLifeModel::nextStep()
 void GameOfLifeModel::startInfiniteLoop()
 {
     m_loopIsStopping = false;
-    while (!m_loopIsStopping && !m_isGameStable)
+    while (!m_loopIsStopping)
     {
         nextStep();
         QTest::qWait(m_delay);
@@ -154,7 +144,7 @@ void GameOfLifeModel::startInfiniteLoop()
 void GameOfLifeModel::startLoop()
 {
     m_loopIsStopping = false;
-    for (quint32 i = 0; i < m_loopCount && !m_loopIsStopping && !m_isGameStable; i++)
+    for (quint32 i = 0; i < m_loopCount && !m_loopIsStopping; i++)
     {
         nextStep();
         QTest::qWait(m_delay);
@@ -215,8 +205,6 @@ void GameOfLifeModel::clearPattern()
 
     m_currentStateContainer.fill(false);
     Q_EMIT dataChanged(index(0, 0), index(height - 1, width - 1), {CellRole});
-
-    m_isGameStable = false;
 }
 
 void GameOfLifeModel::stopLoop()
