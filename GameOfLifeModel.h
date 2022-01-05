@@ -2,6 +2,7 @@
 #define GAMEOFLIFEMODEL_H1B7AD7A5506F4C6995FCE4824C51B436
 
 #include <QAbstractTableModel>
+#include <QByteArray>
 #include <QPoint>
 #include <QVector>
 
@@ -54,8 +55,10 @@ public:
     Q_INVOKABLE bool loadFile(const QString& fileName);
     // reads out the pattern from the file
     Q_INVOKABLE void loadPattern(const QString& plainText);
+    Q_INVOKABLE bool saveFile(const QString& fileName);
     Q_INVOKABLE void clearPattern();
     Q_INVOKABLE void stopLoop();
+    QByteArray savePattern();
 
 Q_SIGNALS:
     void livingCellsAtBeginningAsPercentageChanged();
@@ -86,8 +89,8 @@ private:
 private:
     bool m_isEditable = true;
 
-    static constexpr int width = 15;
-    static constexpr int height = 15;
+    static constexpr int width = 3;
+    static constexpr int height = 3;
     static constexpr int size = width * height;
     typedef QVector<int> StateContainer;
 

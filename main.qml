@@ -119,12 +119,16 @@ Window {
             {
                 id: loadFileButton
                 text: qsTr("Anordnung laden") 
+
+                onClicked: _qmlAdapter.gameOfLifeModel.loadFile("Test.pat")
             }
 
             SettingsButton
             {
                 id: saveFileButton
                 text: qsTr("Anordnung speichern")
+
+                onClicked: _qmlAdapter.gameOfLifeModel.saveFile("Test.pat")
             }            
         }
 

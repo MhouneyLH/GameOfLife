@@ -8,6 +8,13 @@
 #include <QDateTime>
 #include <QDebug>
 
+/////////////////////////////////////////////////////////
+/// CONSTANTS
+/////////////////////////////////////////////////////////
+static const char IDENTIFIER_LIVING_CELL = '1';
+static const char IDENTIFIER_DEAD_CELL = '0';
+static const char IDENTIFIER_NEXT_LINE = '\n';
+
 GameOfLifeModel::GameOfLifeModel(bool editable, QObject* parent)
     : QAbstractTableModel(parent)
     , m_isEditable(editable)
@@ -170,7 +177,7 @@ void GameOfLifeModel::loadPattern(const QString& plainText)
 {
     clearPattern();
 
-    QStringList rows = plainText.split('\n');
+    QStringList rows = plainText.split(IDENTIFIER_NEXT_LINE);
     QSize patternSize(0, rows.count());
 
     // knowing the length of each single row
@@ -191,11 +198,26 @@ void GameOfLifeModel::loadPattern(const QString& plainText)
         for (int x = 0; x < line.length(); x++)
         {
             QPoint cellPosition(x + patternLocation.x(), y + patternLocation.y());
-            m_currentStateContainer[cellIndex(cellPosition)] = line[x] == 'O';
+            m_currentStateContainer[cellIndex(cellPosition)] = line[x] == '1';
         }
     }
 
     Q_EMIT dataChanged(index(0, 0), index(height - 1, width - 1), {CellRole});
+}
+
+bool GameOfLifeModel::saveFile(const QString& fileName)
+{
+    QFile file(fileName);
+
+    if (!file.open(QIODevice::WriteOnly))
+    {
+        return false;
+    }
+
+    file.write(savePattern());
+    file.close();
+
+    return true;
 }
 
 void GameOfLifeModel::clearPattern()
@@ -210,6 +232,30 @@ void GameOfLifeModel::clearPattern()
 void GameOfLifeModel::stopLoop()
 {
     m_loopIsStopping = true;
+}
+
+QByteArray GameOfLifeModel::savePattern()
+{
+    QByteArray rows;
+
+    for (int i = 0; i < m_currentStateContainer.size(); i++)
+    {
+        if (i % width == 0 && i != 0)
+        {
+            rows.append(IDENTIFIER_NEXT_LINE);
+        }
+
+        if (m_currentStateContainer[i])
+        {
+            rows.append(IDENTIFIER_LIVING_CELL);
+        }
+        else
+        {
+            rows.append(IDENTIFIER_DEAD_CELL);
+        }
+    }
+
+    return rows;
 }
 
 int GameOfLifeModel::cellNeighboursCount(const QPoint& cellCoordinates) const
