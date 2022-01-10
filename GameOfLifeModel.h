@@ -9,7 +9,6 @@
 class GameOfLifeModel : public QAbstractTableModel
 {
     Q_OBJECT
-    // @TODO: adding the funtions to just have to set the default values in the .cpp-file instead of setting them also in the .qml-file
     Q_PROPERTY(quint32 livingCellsAtBeginningAsPercentage READ getLivingCellsAtBeginningAsPercentage WRITE setLivingCellsAtBeginningAsPercentage NOTIFY livingCellsAtBeginningAsPercentageChanged)
     Q_PROPERTY(quint32 loopCount READ getLoopCount WRITE setLoopCount NOTIFY loopCountChanged)
     Q_PROPERTY(quint32 stepCount READ getStepCount NOTIFY stepCountChanged)
@@ -18,12 +17,14 @@ class GameOfLifeModel : public QAbstractTableModel
 public:
     explicit GameOfLifeModel(bool editable = true, QObject* parent = nullptr);
 
+    // Model-Enum
     enum Roles
     {
         CellRole
     };
     Q_ENUM(Roles)
 
+    // Cell-Enum
     enum CellStates : quint32
     {
         TwoNeighbours = 2U,
@@ -45,20 +46,27 @@ public:
     /////////////////////////////////////////////////////////
     /// GAME-MECHANIC-FUNCTIONS
     /////////////////////////////////////////////////////////
+    // generates a random pattern
     Q_INVOKABLE void generatePattern();
-    // calculates the next Pattern
-    Q_INVOKABLE void nextStep();
-    Q_INVOKABLE void startInfiniteLoop();
-    // starts a loop with a specific amount of steps
-    Q_INVOKABLE void startLoop();
-    // loads a file with a pattern in it
-    Q_INVOKABLE bool loadFile(const QString& fileName);
-    // reads out the pattern from the file
-    Q_INVOKABLE void loadPattern(const QString& plainText);
+    // saves the pattern into a file
     Q_INVOKABLE bool saveFile(const QString& fileName);
-    Q_INVOKABLE void clearPattern();
-    Q_INVOKABLE void stopLoop();
+    // displaying the current pattern as 0 and 1 in a QByteArray
     QByteArray savePattern();
+    // loads the pattern from a file
+    Q_INVOKABLE bool loadFile(const QString& fileName);
+    // read out the file and recreate the pattern of 0 and 1 into a normal pattern
+    Q_INVOKABLE void loadPattern(const QString& plainText);
+    // clears the current pattern
+    Q_INVOKABLE void clearPattern();
+
+    // starts an infinite loop
+    Q_INVOKABLE void startInfiniteLoop();
+    // starts a loop with a specific amount of loopSteps
+    Q_INVOKABLE void startLoop();
+    // stops every current loop
+    Q_INVOKABLE void stopLoop();
+    // calculates the pattern of each next step
+    Q_INVOKABLE void nextStep();
 
 Q_SIGNALS:
     void livingCellsAtBeginningAsPercentageChanged();
@@ -81,26 +89,31 @@ private:
     /////////////////////////////////////////////////////////
     /// CELL-CALCULATIONS
     /////////////////////////////////////////////////////////
+    // calculates the living cellNeighbours of a cell
     int cellNeighboursCount(const QPoint& cellCoordinates) const;
+    // checks if the given cellCoordinates are valid or not
     static bool areCellCoordinatesValid(const QPoint& cellCoordinates);
+    // calculates the real coordinates based on a given index
     static QPoint cellCoordinatesFromIndex(int cellIndex);
+    // calculates the index based on a given QPoint
     static int cellIndex(const QPoint& cellCoordinates);
 
 private:
-    bool m_isEditable = true;
-
     static constexpr int width = 20;
     static constexpr int height = 20;
     static constexpr int size = width * height;
+    static constexpr quint32 m_mutationConstant = 500U;
+
     typedef QVector<int> StateContainer;
 
     StateContainer m_currentStateContainer;
     quint32 m_livingCellsAtBeginningAsPercentage = 50U;
     quint32 m_loopCount = 100U;
     quint32 m_stepCount = 0U;
-    bool m_loopIsStopping = false;
     quint32 m_delay = 0U;
-    static constexpr quint32 m_mutationConstant = 500U;
+
+    bool m_loopIsStopping = false;
+    bool m_isEditable = true;
 };
 
 #endif // GAMEOFLIFEMODEL_H1B7AD7A5506F4C6995FCE4824C51B436
