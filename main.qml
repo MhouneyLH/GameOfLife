@@ -1,6 +1,8 @@
 import QtQuick 2.15
 import QtQuick.Window 2.15
+import Qt.labs.platform 1.1
 import QtQuick.Controls 2.15
+import QtQuick.Dialogs
 
 Window {
     id: mainWindow
@@ -81,7 +83,7 @@ Window {
             Text
             {
                 id: livingCellsText
-                text: qsTr(_qmlAdapter.gameOfLifeModel.livingCellsAtBeginningAsPercentage.toString() + "%")
+                text: qsTr(_qmlAdapter.gameOfLifeModel.livingCellsAtBeginningAsPercentage.toString() + "% Lebenswahrscheinlichkeit")
                 anchors.horizontalCenter: parent.horizontalCenter
                 font.pixelSize: defaultFontSize
             }
@@ -115,22 +117,39 @@ Window {
                 onClicked: _qmlAdapter.gameOfLifeModel.clearPattern()
             }
 
-            SettingsButton
-            {
-                id: loadFileButton
-                text: qsTr("Anordnung laden") 
+//            SettingsButton
+//            {
+//                id: loadFileButton
+//                text: qsTr("Anordnung laden")
 
-                onClicked: _qmlAdapter.gameOfLifeModel.loadFile("Test.pat")
-            }
+//                onClicked: loadFileDialog.open()
+//            }
 
-            SettingsButton
-            {
-                id: saveFileButton
-                text: qsTr("Anordnung speichern")
+//            SettingsButton
+//            {
+//                id: saveFileButton
+//                text: qsTr("Anordnung speichern")
 
-                onClicked: _qmlAdapter.gameOfLifeModel.saveFile("Test.pat")
-            }            
+//                onClicked: _qmlAdapter.gameOfLifeModel.saveFile("Test.pat")
+//            }
         }
+
+//        FileDialog
+//        {
+//            id: loadFileDialog
+//            title: qsTr("Pattern laden")
+//            modality: Qt.WindowModal
+
+//            onAccepted:
+//            {
+//                _qmlAdapter.gameOfLifeModel.loadFile(loadFileDialog.file)
+//            }
+
+//            onRejected:
+//            {
+//                console.log("rejected")
+//            }
+//        }
 
         Column
         {
@@ -262,7 +281,7 @@ Window {
             SettingsButton
             {
                 id: stopLoopButton
-                text: qsTr("Loop stoppen")
+                text: qsTr("Wiederholungen stoppen")
 
                 onClicked: _qmlAdapter.gameOfLifeModel.stopLoop()
             }                      

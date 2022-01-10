@@ -49,11 +49,11 @@ public:
     // generates a random pattern
     Q_INVOKABLE void generatePattern();
     // saves the pattern into a file
-    Q_INVOKABLE bool saveFile(const QString& fileName);
+    Q_INVOKABLE bool saveFile(const QString fileName);
     // displaying the current pattern as 0 and 1 in a QByteArray
     QByteArray savePattern();
     // loads the pattern from a file
-    Q_INVOKABLE bool loadFile(const QString& fileName);
+    Q_INVOKABLE bool loadFile(const QString fileName);
     // read out the file and recreate the pattern of 0 and 1 into a normal pattern
     Q_INVOKABLE void loadPattern(const QString& plainText);
     // clears the current pattern
@@ -102,7 +102,7 @@ private:
     static constexpr int width = 20;
     static constexpr int height = 20;
     static constexpr int size = width * height;
-    static constexpr quint32 m_mutationConstant = 500U;
+    static constexpr quint32 m_mutationConstant = 1000U;
 
     typedef QVector<int> StateContainer;
 

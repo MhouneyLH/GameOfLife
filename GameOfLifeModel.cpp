@@ -158,7 +158,7 @@ void GameOfLifeModel::startLoop()
     }
 }
 
-bool GameOfLifeModel::loadFile(const QString& fileName)
+bool GameOfLifeModel::loadFile(const QString fileName)
 {
     QFile file(fileName);
 
@@ -169,6 +169,7 @@ bool GameOfLifeModel::loadFile(const QString& fileName)
 
     QTextStream in(&file);
     loadPattern(in.readAll());
+    file.close();
 
     return true;
 }
@@ -205,7 +206,7 @@ void GameOfLifeModel::loadPattern(const QString& plainText)
     Q_EMIT dataChanged(index(0, 0), index(height - 1, width - 1), {CellRole});
 }
 
-bool GameOfLifeModel::saveFile(const QString& fileName)
+bool GameOfLifeModel::saveFile(const QString fileName)
 {
     QFile file(fileName);
 
