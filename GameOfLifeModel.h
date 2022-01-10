@@ -89,8 +89,8 @@ private:
 private:
     bool m_isEditable = true;
 
-    static constexpr int width = 3;
-    static constexpr int height = 3;
+    static constexpr int width = 20;
+    static constexpr int height = 20;
     static constexpr int size = width * height;
     typedef QVector<int> StateContainer;
 

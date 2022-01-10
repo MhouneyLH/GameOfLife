@@ -265,7 +265,7 @@ Window {
                 text: qsTr("Loop stoppen")
 
                 onClicked: _qmlAdapter.gameOfLifeModel.stopLoop()
-            }
+            }                      
         }
     }
 }

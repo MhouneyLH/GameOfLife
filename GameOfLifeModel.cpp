@@ -35,7 +35,7 @@ QHash<int, QByteArray> GameOfLifeModel::roleNames() const
 
 int GameOfLifeModel::rowCount(const QModelIndex& parent) const
 {
-    if (parent.isValid()) // @TODO: what happens here???
+    if (parent.isValid())
     {
         return 0;
     }
@@ -44,7 +44,7 @@ int GameOfLifeModel::rowCount(const QModelIndex& parent) const
 
 int GameOfLifeModel::columnCount(const QModelIndex& parent) const
 {
-    if (parent.isValid()) // @TODO: what happens here???
+    if (parent.isValid())
     {
         return 0;
     }
