@@ -144,7 +144,7 @@ void GameOfLifeModel::startInfiniteLoop()
     while (!m_loopIsStopping)
     {
         nextStep();
-        QTest::qWait(m_delay);
+        QTest::qWait(m_delay); // see on the linux variant
     }
 }
 
@@ -154,7 +154,7 @@ void GameOfLifeModel::startLoop()
     for (quint32 i = 0; i < m_loopCount && !m_loopIsStopping; i++)
     {
         nextStep();
-        QTest::qWait(m_delay);
+        QTest::qWait(m_delay); // see on the linux variant
     }
 }
 
